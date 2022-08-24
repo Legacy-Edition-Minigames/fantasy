@@ -1,5 +1,5 @@
 plugins {
-  id 'fabric-loom' version '0.11-SNAPSHOT'
+  id 'fabric-loom' version '0.12-SNAPSHOT'
   id 'maven-publish'
 }
 
@@ -7,7 +7,7 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version + "+" + project.minecraft_version
+version = project.mod_version + "-" + project.minecraft_version
 group = project.maven_group
 
 loom {
@@ -34,7 +34,6 @@ dependencies {
 
   testmodImplementation sourceSets.main.output
 }
-
 processResources {
   inputs.property "version", project.version
 
@@ -44,7 +43,6 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-  it.options.encoding = "UTF-8"
   it.options.release = 17
 }
 
@@ -53,33 +51,26 @@ java {
 }
 
 jar {
-  from "LICENSE"
+  from("LICENSE") {
+    rename { "${it}_${project.archivesBaseName}" }
+  }
 }
 
+// configure the maven publication
 publishing {
   publications {
     mavenJava(MavenPublication) {
-      artifact(remapJar) {
-        builtBy remapJar
-      }
-      artifact(sourcesJar) {
-        builtBy remapSourcesJar
-      }
+      artifactId archivesBaseName
+      from components.java
     }
   }
-
   repositories {
-    def env = System.getenv()
-    if (env.MAVEN_URL) {
-      maven {
-        credentials {
-          username env.MAVEN_USERNAME
-          password env.MAVEN_PASSWORD
-        }
-        url env.MAVEN_URL
+    maven {
+      url ='s3://maven.kyrptonaught.dev'
+      credentials(AwsCredentials) {
+        accessKey = System.getenv('maven-key-id')
+        secretKey = System.getenv('maven-key')
       }
-    } else {
-      mavenLocal()
     }
   }
 }
