@@ -7,18 +7,23 @@ import net.minecraft.world.level.UnmodifiableLevelProperties;
 
 public final class RuntimeWorldProperties extends UnmodifiableLevelProperties {
     private final RuntimeWorldConfig config;
-    private final GameRules rules;
+    private GameRules rules;
+    private boolean mirrorGameRules = false;
 
     public RuntimeWorldProperties(SaveProperties saveProperties, RuntimeWorldConfig config) {
         super(saveProperties, saveProperties.getMainWorldProperties());
         this.config = config;
-
-        this.rules = new GameRules();
-        config.getGameRules().applyTo(this.rules, null);
+        if (config.mirrorsOverworldGameRules()) {
+            this.mirrorGameRules = true;
+        } else {
+            this.rules = new GameRules();
+            config.getGameRules().applyTo(this.rules, null);
+        }
     }
 
     @Override
     public GameRules getGameRules() {
+        if (this.mirrorGameRules) return super.getGameRules();
         return this.rules;
     }
 
