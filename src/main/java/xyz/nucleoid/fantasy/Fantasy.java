@@ -107,6 +107,23 @@ public final class Fantasy {
     }
 
     /**
+     * Creates a new temporary world with the given {@link RuntimeWorldConfig} that will not be saved and will be
+     * deleted when the server exits.
+     * <p>
+     * The created world is returned asynchronously through a {@link RuntimeWorldHandle}.
+     * This handle can be used to acquire the {@link ServerWorld} object through {@link RuntimeWorldHandle#asWorld()},
+     * as well as to delete the world through {@link RuntimeWorldHandle#delete()}.
+     *
+     * @param key the unique identifier for this dimension
+     * @param config the config with which to construct this temporary world
+     * @return a future providing the created world
+     */
+    public RuntimeWorldHandle openTemporaryWorld(Identifier key, RuntimeWorldConfig config) {
+        RuntimeWorld world = this.addTemporaryWorld(key, config);
+        return new RuntimeWorldHandle(this, world);
+    }
+
+    /**
      * Gets or creates a new persistent world with the given identifier and {@link RuntimeWorldConfig}. These worlds
      * will be saved to disk and can be restored after a server restart.
      * <p>
@@ -153,13 +170,25 @@ public final class Fantasy {
         return this.worldManager.add(worldKey, config, RuntimeWorld.Style.TEMPORARY);
     }
 
+    private RuntimeWorld addTemporaryWorld(Identifier key, RuntimeWorldConfig config) {
+        RegistryKey<World> worldKey = RegistryKey.of(Registry.WORLD_KEY, key);
+
+        try {
+            LevelStorage.Session session = this.serverAccess.getSession();
+            FileUtils.forceDeleteOnExit(session.getWorldDirectory(worldKey).toFile());
+        } catch (IOException ignored) {
+        }
+
+        return this.worldManager.add(worldKey, config, RuntimeWorld.Style.TEMPORARY);
+    }
+
     void enqueueWorldDeletion(ServerWorld world) {
         this.server.submit(() -> {
             this.deletionQueue.add(world);
         });
     }
 
-    private boolean tickDeleteWorld(ServerWorld world) {
+    public boolean tickDeleteWorld(ServerWorld world) {
         if (this.isWorldUnloaded(world)) {
             this.worldManager.delete(world);
             return true;
