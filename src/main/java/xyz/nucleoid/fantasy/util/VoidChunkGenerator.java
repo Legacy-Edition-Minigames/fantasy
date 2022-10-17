@@ -63,7 +63,8 @@ public class VoidChunkGenerator extends ChunkGenerator {
         }
 
         @Override
-        public void method_40470(double[] ds, class_6911 arg) { }
+        public void applyEach(double[] densities, EachApplier applier) {
+        }
 
         @Override
         public DensityFunction apply(DensityFunctionVisitor visitor) {
@@ -81,7 +82,7 @@ public class VoidChunkGenerator extends ChunkGenerator {
         }
 
         @Override
-        public CodecHolder<? extends DensityFunction> getCodec() {
+        public CodecHolder<? extends DensityFunction> getCodecHolder() {
             return CodecHolder.of(Codec.unit(this));
         }
     };
