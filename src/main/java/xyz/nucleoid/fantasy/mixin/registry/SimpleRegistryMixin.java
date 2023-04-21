@@ -20,23 +20,39 @@ import java.util.Optional;
 @Mixin(SimpleRegistry.class)
 public abstract class SimpleRegistryMixin<T> implements RemoveFromRegistry<T> {
 
-    @Shadow @Final private Map<T, RegistryEntry.Reference<T>> valueToEntry;
+    @Shadow
+    @Final
+    private Map<T, RegistryEntry.Reference<T>> valueToEntry;
 
-    @Shadow @Final private Map<Identifier, RegistryEntry.Reference<T>> idToEntry;
+    @Shadow
+    @Final
+    private Map<Identifier, RegistryEntry.Reference<T>> idToEntry;
 
-    @Shadow @Final private Map<RegistryKey<T>, RegistryEntry.Reference<T>> keyToEntry;
+    @Shadow
+    @Final
+    private Map<RegistryKey<T>, RegistryEntry.Reference<T>> keyToEntry;
 
-    @Shadow @Final private Map<T, Lifecycle> entryToLifecycle;
+    @Shadow
+    @Final
+    private Map<T, Lifecycle> entryToLifecycle;
 
-    @Shadow @Final private ObjectList<RegistryEntry.Reference<T>> rawIdToEntry;
+    @Shadow
+    @Final
+    private ObjectList<RegistryEntry.Reference<T>> rawIdToEntry;
 
-    @Shadow @Final private Object2IntMap<T> entryToRawId;
+    @Shadow
+    @Final
+    private Object2IntMap<T> entryToRawId;
 
-    @Shadow public abstract Optional<RegistryEntry<T>> getEntry(int rawId);
+    @Shadow
+    public abstract Optional<RegistryEntry<T>> getEntry(int rawId);
 
-    @Shadow private boolean frozen;
+    @Shadow
+    private boolean frozen;
 
-    @Shadow @Nullable private List<RegistryEntry.Reference<T>> cachedEntries;
+    @Shadow
+    @Nullable
+    private List<RegistryEntry.Reference<T>> cachedEntries;
 
     @Override
     public boolean fantasy$remove(T entry) {

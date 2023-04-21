@@ -5,7 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.registry.*;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.world.ServerWorld;
@@ -61,7 +64,8 @@ public class VoidChunkGenerator extends ChunkGenerator {
         }
 
         @Override
-        public void fill(double[] ds, EachApplier arg) { }
+        public void fill(double[] ds, EachApplier arg) {
+        }
 
         @Override
         public DensityFunction apply(DensityFunctionVisitor visitor) {
@@ -184,6 +188,6 @@ public class VoidChunkGenerator extends ChunkGenerator {
 
     @Override
     public StructurePlacementCalculator createStructurePlacementCalculator(RegistryWrapper<StructureSet> structureSetRegistry, NoiseConfig noiseConfig, long seed) {
-        return StructurePlacementCalculator.create(noiseConfig, seed, biomeSource, Stream.empty());
+        return StructurePlacementCalculator.create(noiseConfig, seed, this.biomeSource, Stream.empty());
     }
 }

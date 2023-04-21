@@ -1,11 +1,8 @@
 package xyz.nucleoid.fantasy.test;
 
-import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
 import xyz.nucleoid.fantasy.Fantasy;
 import xyz.nucleoid.fantasy.RuntimeWorldConfig;
@@ -23,5 +20,4 @@ public final class FantasyInitializer implements ModInitializer {
             );
         });
     }
-
 }

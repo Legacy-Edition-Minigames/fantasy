@@ -34,17 +34,17 @@ public class FilteredRegistry<T> extends SimpleRegistry<T> {
     @Nullable
     @Override
     public Identifier getId(T value) {
-        return check.test(value) ? this.source.getId(value) : null;
+        return this.check.test(value) ? this.source.getId(value) : null;
     }
 
     @Override
     public Optional<RegistryKey<T>> getKey(T entry) {
-        return check.test(entry) ? this.source.getKey(entry) : Optional.empty();
+        return this.check.test(entry) ? this.source.getKey(entry) : Optional.empty();
     }
 
     @Override
     public int getRawId(@Nullable T value) {
-        return check.test(value) ? this.source.getRawId(value) : -1;
+        return this.check.test(value) ? this.source.getRawId(value) : -1;
     }
 
     @Nullable

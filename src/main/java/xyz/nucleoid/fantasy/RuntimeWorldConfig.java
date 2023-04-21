@@ -64,7 +64,7 @@ public final class RuntimeWorldConfig {
         this.generator = generator;
         return this;
     }
-	
+
     public RuntimeWorldConfig setShouldTickTime(boolean shouldTickTime) {
         this.shouldTickTime = shouldTickTime;
         return this;
@@ -146,7 +146,7 @@ public final class RuntimeWorldConfig {
     public ChunkGenerator getGenerator() {
         return this.generator;
     }
-	
+
     public boolean shouldTickTime() {
         return this.shouldTickTime;
     }

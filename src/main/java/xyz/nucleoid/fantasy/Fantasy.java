@@ -171,7 +171,7 @@ public final class Fantasy {
     }
 
     private RuntimeWorld addTemporaryWorld(Identifier key, RuntimeWorldConfig config) {
-        RegistryKey<World> worldKey = RegistryKey.of(Registry.WORLD_KEY, key);
+        RegistryKey<World> worldKey = RegistryKey.of(RegistryKeys.WORLD, key);
 
         try {
             LevelStorage.Session session = this.serverAccess.getSession();
@@ -228,8 +228,7 @@ public final class Fantasy {
     private List<RuntimeWorld> collectTemporaryWorlds() {
         List<RuntimeWorld> temporaryWorlds = new ArrayList<>();
         for (ServerWorld world : this.server.getWorlds()) {
-            if (world instanceof RuntimeWorld) {
-                RuntimeWorld runtimeWorld = (RuntimeWorld) world;
+            if (world instanceof RuntimeWorld runtimeWorld) {
                 if (runtimeWorld.style == RuntimeWorld.Style.TEMPORARY) {
                     temporaryWorlds.add(runtimeWorld);
                 }

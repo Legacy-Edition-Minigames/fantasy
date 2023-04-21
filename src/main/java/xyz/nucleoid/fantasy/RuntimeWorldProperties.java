@@ -6,7 +6,7 @@ import net.minecraft.world.SaveProperties;
 import net.minecraft.world.level.UnmodifiableLevelProperties;
 
 public final class RuntimeWorldProperties extends UnmodifiableLevelProperties {
-    protected final RuntimeWorldConfig config;
+    final RuntimeWorldConfig config;
     private GameRules rules;
     private boolean mirrorGameRules = false;
 

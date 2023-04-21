@@ -1,15 +1,10 @@
 plugins {
-  id 'fabric-loom' version '1.1.+'
+  id 'fabric-loom' version '1.1-SNAPSHOT'
   id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.archives_base_name
 version = project.mod_version + "-" + project.minecraft_version
 group = project.maven_group
-
 
 sourceSets {
   testmod {
@@ -47,10 +42,14 @@ dependencies {
 
   modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-  modLocalRuntime "eu.pb4:polymer-reg-sync-manipulator:0.4.0-pre.2+1.19.4-rc2"
+  modLocalRuntime "eu.pb4:polymer-reg-sync-manipulator:0.4.7+1.19.4"
 
   testmodImplementation sourceSets.main.output
 }
+base {
+  archivesName = project.archives_base_name
+}
+
 processResources {
   inputs.property "version", project.version
 
@@ -60,16 +59,18 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
+  // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
   it.options.release = 17
 }
 
 java {
-  withSourcesJar()
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
   from("LICENSE") {
-    rename { "${it}_${project.archivesBaseName}" }
+    rename { "${it}_${base.archivesName.get()}"}
   }
 }
 
