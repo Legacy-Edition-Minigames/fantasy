@@ -3,8 +3,13 @@ plugins {
   id 'maven-publish'
 }
 
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = project.archives_base_name
 version = project.mod_version + "-" + project.minecraft_version
 group = project.maven_group
+
 
 sourceSets {
   testmod {
@@ -42,12 +47,9 @@ dependencies {
 
   modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-  modLocalRuntime "eu.pb4:polymer-reg-sync-manipulator:0.4.7+1.19.4"
+  modLocalRuntime "eu.pb4:polymer-reg-sync-manipulator:0.5.5+1.20.1"
 
   testmodImplementation sourceSets.main.output
-}
-base {
-  archivesName = project.archives_base_name
 }
 
 processResources {
@@ -59,19 +61,16 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-  // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+  it.options.encoding = "UTF-8"
   it.options.release = 17
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
+  withSourcesJar()
 }
 
 jar {
-  from("LICENSE") {
-    rename { "${it}_${base.archivesName.get()}"}
-  }
+  from "LICENSE"
 }
 
 // configure the maven publication

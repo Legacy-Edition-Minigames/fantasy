@@ -1,6 +1,7 @@
 package xyz.nucleoid.fantasy;
 
 import com.google.common.base.Preconditions;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -28,6 +29,7 @@ public final class RuntimeWorldConfig {
     private long timeOfDay = 6000;
     private Difficulty difficulty = Difficulty.NORMAL;
     private final GameRuleStore gameRules = new GameRuleStore();
+    private RuntimeWorld.Constructor worldConstructor = RuntimeWorld::new;
 
     private boolean mirrorOverworldGameRules = false;
     private int sunnyTime = Integer.MAX_VALUE;
@@ -35,9 +37,15 @@ public final class RuntimeWorldConfig {
     private int rainTime;
     private boolean thundering;
     private int thunderTime;
+    private TriState flat = TriState.DEFAULT;
 
     public RuntimeWorldConfig setSeed(long seed) {
         this.seed = seed;
+        return this;
+    }
+
+    public RuntimeWorldConfig setWorldConstructor(RuntimeWorld.Constructor constructor) {
+        this.worldConstructor = constructor;
         return this;
     }
 
@@ -64,7 +72,7 @@ public final class RuntimeWorldConfig {
         this.generator = generator;
         return this;
     }
-
+	
     public RuntimeWorldConfig setShouldTickTime(boolean shouldTickTime) {
         this.shouldTickTime = shouldTickTime;
         return this;
@@ -124,6 +132,15 @@ public final class RuntimeWorldConfig {
         return this;
     }
 
+    public RuntimeWorldConfig setFlat(TriState state) {
+        this.flat = state;
+        return this;
+    }
+
+    public RuntimeWorldConfig setFlat(boolean state) {
+        return this.setFlat(TriState.of(state));
+    }
+
     public long getSeed() {
         return this.seed;
     }
@@ -145,6 +162,10 @@ public final class RuntimeWorldConfig {
     @Nullable
     public ChunkGenerator getGenerator() {
         return this.generator;
+    }
+
+    public RuntimeWorld.Constructor getWorldConstructor() {
+        return this.worldConstructor;
     }
 
     public boolean shouldTickTime() {
@@ -185,5 +206,9 @@ public final class RuntimeWorldConfig {
 
     public boolean isThundering() {
         return this.thundering;
+    }
+
+    public TriState isFlat() {
+        return this.flat;
     }
 }
